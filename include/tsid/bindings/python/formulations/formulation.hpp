@@ -36,6 +36,7 @@
 #include "tsid/tasks/task-joint-posVelAcc-bounds.hpp"
 #include "tsid/tasks/task-angular-momentum-equality.hpp"
 #include "tsid/tasks/task-two-frames-equality.hpp"
+#include "tsid/tasks/task-com-in-frame-equality.hpp"
 
 namespace tsid {
 namespace python {
@@ -70,6 +71,9 @@ struct InvDynPythonVisitor
         .def("addMotionTask",
              &InvDynPythonVisitor::addMotionTask_TwoFramesEquality,
              bp::args("task", "weight", "priorityLevel", "transition duration"))
+        .def("addMotionTask", 
+             &InvDynPythonVisitor::addMotionTask_ComInFrameEquality, 
+             bp::args("task", "weight", "priorityLevel", "transition duration"))             
         .def("addForceTask", &InvDynPythonVisitor::addForceTask_COP,
              bp::args("task", "weight", "priorityLevel", "transition duration"))
         .def("addActuationTask", &InvDynPythonVisitor::addActuationTask_Bounds,
@@ -169,6 +173,11 @@ struct InvDynPythonVisitor
       unsigned int priorityLevel, double transition_duration) {
     return self.addMotionTask(task, weight, priorityLevel, transition_duration);
   }
+  static bool addMotionTask_ComInFrameEquality(
+     T& self, tasks::TaskComInFrameEquality& task, double weight, 
+     unsigned int priorityLevel, double transition_duration){
+    return self.addMotionTask(task, weight, priorityLevel, transition_duration);
+  }              
   static bool addForceTask_COP(T& self, tasks::TaskCopEquality& task,
                                double weight, unsigned int priorityLevel,
                                double transition_duration) {
